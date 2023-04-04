@@ -1,0 +1,346 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Twitter's ranking algorithm is irretrievably flawed</title>
+	<meta name="description" content="Twitter's ranking algorithm is irretrievably flawed">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:creator" content="@TolstoyDotCom" />
+	<meta name="twitter:url" content="https://tolstoydotcom.github.io/twitter-ranking-algorithm/" />
+	<meta name="twitter:title" content="Twitter's ranking algorithm is irretrievably flawed" />
+	<meta name="twitter:description" content="See these examples." />
+	<meta name="twitter:image" content="https://tolstoydotcom.github.io/twitter-ranking-algorithm/censorship.jpg" />
+
+	<link rel="stylesheet" href="css/sortable-theme-bootstrap.css" />
+	<link rel="stylesheet" href="css/sortable-theme-light.css" />
+
+	<style>
+		/* Prism.js */
+		code[class*="language-"], pre[class*="language-"] {color: black; font-family: Consolas, Monaco, 'Andale Mono', monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4; -webkit-hyphens: none; -moz-hyphens: none; -ms-hyphens: none; hyphens: none; } /* Code blocks */ pre[class*="language-"] {padding: 1em; margin: .5em 0; overflow: auto; font-size: 14px; } :not(pre) > code[class*="language-"], pre[class*="language-"] {background: rgba(0, 0, 0, .05); } /* Inline code */ :not(pre) > code[class*="language-"] {padding: .1em; border-radius: .3em; } .token.comment, .token.prolog, .token.doctype, .token.cdata {color: slategray; } .token.punctuation {color: #999; } .namespace {opacity: .7; } .token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol {color: #905; } .token.selector, .token.attr-name, .token.string, .token.builtin {color: #690; } .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string, .token.variable {color: #a67f59; } .token.atrule, .token.attr-value, .token.keyword {color: #07a; } .token.regex, .token.important {color: #e90; } .token.important {font-weight: bold; } .token.entity {cursor: help; }
+
+		html, body {
+			height: 100%;
+		}
+
+		body {
+			margin: 0;
+			font-family: "proxima-nova", "Helvetica Neue", sans-serif;
+		}
+
+		table.showcase {
+			height: 100%;
+			width: 100%;
+			position: relative;
+		}
+
+		table.showcase .showcase-inner {
+			margin: 40px auto 60px;
+			padding: 10px;
+		}
+
+		table.showcase:after {
+			content: "";
+			display: block;
+			position: absolute;
+			opacity: 0.5;
+			left: 0;
+			right: 0;
+			bottom: 20px;
+			margin: auto;
+			height: 0;
+			width: 0;
+			border-width: 18px;
+			border-style: solid;
+			border-color: transparent;
+			border-top-color: inherit;
+		}
+
+		table.showcase.last-showcase:after {
+			display: none;
+		}
+
+		table.showcase .showcase-inner h1 {
+			font-size: 50px;
+			text-align: center;
+			font-weight: 300;
+		}
+
+		table.showcase .showcase-inner h2 {
+			font-size: 24px;
+			text-align: center;
+			font-weight: 300;
+			margin: 1em 0 1em;
+			padding: 0 10%;
+		}
+
+		table.showcase .showcase-inner p {
+			text-align: center;
+		}
+
+		.button {
+			display: inline-block;
+			border: 2px solid #fff;
+			color: #fff;
+			padding: 1em 1.25em;
+			font-weight: 500;
+			text-transform: uppercase;
+			letter-spacing: 3px;
+			text-decoration: none;
+			cursor: pointer;
+			width: 140px;
+			font-size: .8em;
+			line-height: 1.3em;
+		}
+
+		.button.dark {
+			background: #fff;
+			color: #0bab74;
+		}
+
+		table.showcase.hero {
+			background: #14c589;
+			color: #fff;
+		}
+
+		table.showcase.hero h1,
+		table.showcase.hero h2 {
+			color: #fff
+		}
+
+		table.showcase.hero:after {
+			border-top-color: #fff
+		}
+
+		table.showcase.hero table[data-sortable].sortable-theme-bootstrap {
+			font-family: inherit;
+			font-size: 16px;
+		}
+
+		table.showcase.hero table[data-sortable].sortable-theme-bootstrap th[data-sorted="true"] {
+			color: #0daf77;
+			background: #b8f1dd;
+			border-bottom-color: #22bd88;
+		}
+
+		table.showcase .showcase-inner table[data-sortable] {
+			margin: 4em auto 3em;
+		}
+
+		table.showcase.hero .showcase-inner table[data-sortable] {
+			margin-bottom: 1em;
+		}
+
+		table.showcase .showcase-inner p.source {
+			color: rgba(255, 255, 255, .7);
+			font-weight: 300;
+			letter-spacing: .01em;
+			text-align: center;
+			font-size: 12px;
+			margin: 0 0 3em;
+			padding: 0 20%;
+		}
+
+		table.showcase .showcase-inner p.source a {
+			color: inherit;
+		}
+
+		@media (max-width: 786px) {
+			table.showcase .showcase-inner table[data-sortable] tr *:nth-child(4) {
+				display: none;
+			}
+
+			table.showcase .button.dark {
+				display: none;
+			}
+		}
+
+		@media (max-width: 480px) {
+			table.showcase .showcase-inner table[data-sortable] tr *:nth-child(3) {
+				display: none;
+			}
+		}
+
+		table.showcase.about {
+			background: #fff1dd;
+		}
+
+		table.showcase.about {
+			background: #fff1dd;
+		}
+
+		table.showcase.about a {
+			color: #c96c24;
+		}
+
+		table.showcase.about p > code {
+			background: rgba(0, 0, 0, .05);
+		}
+
+		table.showcase.about p,
+		table.showcase.about pre {
+			text-align: left;
+			width: 500px;
+			max-width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+
+		@media (max-width: 568px) {
+			table.showcase.about p,
+			table.showcase.about pre {
+				width: 400px;
+			}
+		}
+
+		@media (max-width: 420px) {
+			table.showcase.about p,
+			table.showcase.about pre {
+				width: 280px;
+			}
+		}
+
+		table.showcase.themes {
+			background: #eee;
+		}
+
+		table.showcase.themes.sortable-theme-minimal {
+			background: #fff;
+		}
+
+		table.showcase.themes.sortable-theme-light {
+			background: #f8f8f8;
+		}
+
+		table.showcase.themes.sortable-theme-dark {
+			background: #323232;
+		}
+
+		table.showcase.themes.sortable-theme-bootstrap {
+			background: #f2f8ff;
+		}
+
+		table.showcase.themes.sortable-theme-dark h1,
+		table.showcase.themes.sortable-theme-dark h2,
+		table.showcase.themes.sortable-theme-dark p {
+			color: #e6e6e6;
+		}
+
+		table.showcase.themes .themes-list {
+			margin: 4em auto;
+			padding: 0;
+			list-style: none;
+			text-align: center;
+			font-size: 18px;
+		}
+
+		table.showcase.themes .themes-list li {
+			padding: 0;
+			margin: 0;
+			display: inline;
+		}
+
+		table.showcase.themes .themes-list li a {
+			cursor: pointer;
+			opacity: 0.3;
+			padding: .5em;
+			display: inline-block;
+		}
+
+		table.showcase.themes .themes-list li a.selected {
+			opacity: 1;
+		}
+
+		table.showcase.themes.sortable-theme-dark .themes-list li a {
+			color: #fff;
+		}
+
+		#intro {
+			margin-left:auto;
+			margin-right:auto;
+			width:70%;
+			padding: 10px;
+		}
+
+		div {
+			width:80%;
+			margin-left:auto;
+			margin-right:auto;
+			margin-top:1rem;
+			margin-bottom:1rem;
+		}
+
+		img {
+			margin-left:20rem;
+			border:2px solid black;
+		}
+	</style>
+</head>
+<body>
+
+	<div>
+	Twitter's ranking algorithm is irretrievably flawed when it comes to controversial topics like politics. That algorithm determines which tweets you see and in which order, and it consistently promotes low quality tweets while usually suppressing higher quality tweets.
+	</div>
+
+	<div>
+	For a tangible example, consider this from GovNedLamont/status/1643011987356393472:
+	</div>
+
+	<img src="GovNedLamont_040323.png"/>
+
+	<div>
+	That's on a cutesy thread where the governors of CT and CA wager on a sports game. Whether you agree with the last tweet in the image or not, you have to admit that it's higher quality than the tweets above. Yet, the Twitter ranking algorithm thinks the first three are better: it calls those "HighQuality" and the last tweet "LowQuality". In fact, the Twitter algorithm hid the last tweet: I had to click the 'Show more replies' link to see it.
+	</div>
+
+	<div>
+	Does that make any sense? Shouldn't the algorithm have ranked the last tweet above the other three?
+	</div>
+
+	<div>
+	If you look at reply threads you'll see this over and over. For instance, here are two "HighQuality" replies on GavinNewsom/status/1643066244982030339:
+	</div>
+
+	<img src="GavinNewsom_040323.png"/>
+
+	<div>
+	The first tweet has nothing to do with the Newsom tweet it's a reply to and I've seen that image dozens of times before. The last tweet is from a pro-Newsom activist and "human bot": he appears to be a real person but he never really says anything. Despite that, his replies are invariably near the top of Newsom's replies.
+	</div>
+
+	<div>
+	Here's another case from BrianDahleCA/status/1642989102051229696 (BrianDahleCA/status/1641590521297780736 is similar but has 100s of replies):
+	</div>
+
+	<img src="BrianDahleCA_040323.png"/>
+
+	<div>
+	For an explanation, see "Adults led a pet goat to slaughter to teach girl a lesson. All she learned was cruelty | Opinion" (<em>"The only authority figure who comes off looking decent in this whole affair is Republican state Sen. Brian Dahle, who bought the goat at auction and then agreed to let it live"</em>). Whatever the facts of that matter, there are much more important things to hold Dahle accountable over. Yet, Twitter is preventing that by elevating goat-related replies above all others. That's like elevating dozens of "me too" comments above those with actual content.
+	</div>
+
+	<div>
+	To be clear, I only use Twitter to try to hold leaders accountable. If you use Twitter to discuss BTS or similar the ranking algorithm might work OK. The Youtube recommendation algorithm works fairly well for music and, even though Google is much (much, much) more technically competent than Twitter, Twitter might work OK if you're only there for music or sports.
+	</div>
+
+	<div>
+	However, politics and other controversial topics are a different beast. Twitter elevates those who tell others what they want to hear and who avoid challenging others. However, those who are in the habit of showing others wrong are likely to be blocked and reported, resulting in Twitter silencing them. Even Elon Musk admitted that blocks can be used to silence dissent, but, obviously, he hasn't done anything about that.
+	</div>
+
+	<div>
+	For hundreds of other examples of how flawed the Twitter algorithm is, see these <a href="https://tolstoy.com/twittercensorship/">Twitter censorship reports</a>.
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="js/sortable.min.js"></script>
+	<script src="js/readmore.min.js"></script>
+
+	<script>
+		$(document).ready( function() {
+			$('.readmore').readmore();
+		});
+	</script>
+</body>
+</html>
